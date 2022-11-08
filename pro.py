@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 import time
 translated_date = time.strftime("%Y-%m-%d", time.localtime())
 
-# 复制所有广告图片
+# libmind主题图片
 def copy_allfiles(src, dest):
     '''
     复制文件夹内所有文件：src:原文件夹；dest:目标文件夹
@@ -23,8 +23,8 @@ def copy_allfiles(src, dest):
 python_path = r"/Users/tangqiang/PycharmProjects/pythonProject/deepL_pro/"
 css_file = r"style.css"
 
-book_no = "j04"
-book_name = "seeing_like_a_state"
+book_no = "b53"
+book_name = "the_lessons_of_history"
 
 # 第一步：读取英文和中文文档，设置输出双语文件名
 path = '/Users/tangqiang/books/{}_{}/'.format(book_no,book_name)
@@ -128,6 +128,15 @@ html_head = """
 <div class="top right">
 <p><img src="images/libmind.com-2.png"></p></div>
 </div>
+
+<div class ="bottom">
+<div class ="top left">
+<p style="text-align: center">Subscribe <b>Telegram(@libmind)</b>, and receive new bilingual books: <a href="https://t.me/libmind">https://t.me/libmind</a></p></div>
+<div class="top right">
+<p style="text-align: center">关注<b>Telegram(@libmind)</b>，接收最新双语书资讯：<a href="https://t.me/libmind">https://t.me/libmind</a></p></div>
+</div>
+
+
 """.format(soup_en.title.string, soup_zh.title.string, translated_date)
 
 with open(path + file_bi, "a") as f:
@@ -136,7 +145,7 @@ with open(path + file_bi, "a") as f:
 # .2）输出主干部分（仅文字）
 for el in (lst_bi):
     if lst_bi[0]=="" and lst_bi[1]=="":
-        pass
+        continue
     else:
         with open(path + file_bi, "a") as f:
             f.write(f'<div class ="bottom">\n<div class ="top left">\n')

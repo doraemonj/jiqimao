@@ -28,16 +28,16 @@ file_en = r"{}_en.html".format(book_name)
 file_zh = r"{}_zh.html".format(book_name)
 file_bi = r"{}_bi_en_zh.html".format(book_name)
 
-# 查看是否存在image文件夹：若有则忽略，若不存在则创建 2022-11-21 17:20:39
+# ===查看是否存在image文件夹：若有则忽略，若不存在则创建 2022-11-21 17:20:39
 image_dir = path + r"images"
 if not os.path.exists(image_dir):
     os.makedirs(image_dir)
 
 # ===2022-10-25 调试代码：复制广告图片文件和style.css文件
-libmind.copy_allfiles(python_path+"ad_img", path+"images")              # 复制广告图片
+libmind.copy_allfiles(python_path+"ad_img", path+"images")      # 复制广告图片
 shutil.copyfile(python_path+"style.css", path+"style.css")      # 复制css文件
 
-# ===
+# ===读取中英文文件
 
 html_en = open(path + file_en, 'r', encoding='utf-8').read()    # 读取英文文件
 html_zh = open(path + file_zh, 'r', encoding='utf-8').read()    # 读取中文文件

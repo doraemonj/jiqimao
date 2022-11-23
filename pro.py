@@ -11,12 +11,12 @@ import random
 translated_date = time.strftime("%Y-%m-%d", time.localtime())   # 电子书制作日期
 
 # Python基础路径设置及待复制：
-python_path = r"/Users/tangqiang/PycharmProjects/pythonProject/deepL_pro/"
+python_path = r"/Users/tangqiang/jiqimao/"
 # Windows用户可更换为：python_path = r"C:\\Users\\Administrator\\jiqimao\\"
 # 并调整文件路径
 
-book_no = "e34"
-book_name = "plutocracy_and_democracy"
+book_no = "b53"
+book_name = "the_lessons_of_history"
 
 # 第一步：读取英文和中文文档，设置输出双语文件名
 path = r"/Users/tangqiang/books/{}_{}/".format(book_no,book_name)

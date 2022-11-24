@@ -2,12 +2,16 @@
 # 与英文原文档（book_name_en.html）合并
 # 做成左右中英对照格式的文档（book_name_bi_en_zh.html）/Users/tangqiang/books/e33_identity
 
+import time
 import os
 import shutil
 from bs4 import BeautifulSoup
 import time
 import libmind
 import random
+
+# 开始计时
+time_start=time.time()
 translated_date = time.strftime("%Y-%m-%d", time.localtime())   # 电子书制作日期
 
 # Python基础路径设置及待复制：
@@ -15,8 +19,8 @@ python_path = r"/Users/tangqiang/jiqimao/"
 # Windows用户可更换为：python_path = r"C:\\Users\\Administrator\\jiqimao\\"
 # 并调整文件路径
 
-book_no = "b53"
-book_name = "the_lessons_of_history"
+book_no = "b74"
+book_name = "financing_illegal_migration"
 
 # 第一步：读取英文和中文文档，设置输出双语文件名
 path = r"/Users/tangqiang/books/{}_{}/".format(book_no,book_name)
@@ -211,3 +215,14 @@ html_end = libmind.html_end
 with open(path + file_bi, "a", encoding="utf-8") as f:
     f.write(f"{html_end}")
     f.write(f"</body>\n</html>")
+
+# 判断中英文两个数组的数量是否一致
+if len(lst_en) == len(lst_zh):
+    print(f"中英文数组长度一致，均为{len(lst_zh)}")
+else:
+    print(f"中英文数组长度不一致：英文{len(lst_en)}行，中文{len(lst_zh)}行")
+    print(f"请检查！")
+
+# 计算时间
+time_end=time.time()
+print(f"本书合并流程消耗{time_end-time_start:.2f}秒")

@@ -206,7 +206,7 @@ html_head = """
 <div class ="top left">
 <p class ="en"><img src="cover.jpg"></p></div>
 <div class="top right">
-<p class ="cn"><h2>{0}</h2><h2>{1}</h2><br /><h4>English-Chinese Bilingual Edition</h4><h4>中英双语对照版</h4><br /><h4>libmind.com</h4><h4>{2}</h4></p></div>
+<p class ="cn"><h2>{0}</h2><h2>{1}</h2><br /><h4>English-Chinese Bilingual Translation Course</h4><h4><a href="https://libmind.com/ebooks/translate-any-ebook-in-5-minutes-secret-course/">👉&nbsp; &nbsp; 自助译书手册&nbsp; &nbsp; 👈</a><br />·<br />让你能五分钟翻译外文书<br />·<br />↓&nbsp; &nbsp; &nbsp; 成果展示&nbsp; &nbsp; &nbsp; ↓</h4><br /><h4>libmind.com</h4><h4>{2}</h4></p></div>
 </div>
 
 <div class ="bottom" style="text-align: center">

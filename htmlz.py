@@ -5,10 +5,8 @@
 # Author：Tecson
 # Date: 2022-11-25
 
-
 import os
 import zipfile
-
 
 class Htmlz():
     def __init__(self,htmlz_file,out_dir="") -> None:
@@ -32,6 +30,7 @@ class Htmlz():
         # 若目录不存在，则建立目录
         if not os.path.exists(self.out_dir):
             os.makedirs(self.out_dir)
+            print("已创建新目录")
         # 确保目录存在，并且是目录而非文件
         if not (os.path.isdir(self.out_dir) & os.path.exists(self.out_dir) ):
             raise Exception(f"{self.out_dir} 解压缩路径不正确或不存在。")

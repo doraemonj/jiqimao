@@ -7,8 +7,9 @@ import os
 import shutil
 from bs4 import BeautifulSoup
 import time
-import libmind
 import random
+import libmind
+import htmlz
 
 # 开始计时
 time_start=time.time()
@@ -19,8 +20,13 @@ python_path = r"/Users/tangqiang/jiqimao/"
 # Windows用户可更换为：python_path = r"C:\\Users\\Administrator\\jiqimao\\"
 # 并调整文件路径
 
-book_no = "b74"
-book_name = "financing_illegal_migration"
+# 设置calibre路径，自动解压calibre转换的htmlz文件，并计算出book_no和book_name
+calibre_path = r"/Users/tangqiang/Calibre Library/"
+author_name = r"Chuck Chakrapani"
+book_name = r"The Good Life Handbook"
+
+book_no = "e29"
+book_name = "why_buddhism_is_true"
 
 # 第一步：读取英文和中文文档，设置输出双语文件名
 path = r"/Users/tangqiang/books/{}_{}/".format(book_no,book_name)
@@ -207,8 +213,10 @@ for i,el in enumerate(lst_bi):
                 elif img_num > len(idx_img):
                     pass
                 else:
-                    print(f"第{img_num}张图片报错，放弃，请检查")
-                    img_num += 1
+                    if img_num >= len(idx_img):
+                        print(f"完成{img_num}张图片插入")
+                    else:
+                        print(f"第{img_num}张图片报错，放弃，请检查")
 
 # .3)输出末尾部分
 html_end = libmind.html_end

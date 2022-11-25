@@ -20,13 +20,8 @@ python_path = r"/Users/tangqiang/jiqimao/"
 # Windows用户可更换为：python_path = r"C:\\Users\\Administrator\\jiqimao\\"
 # 并调整文件路径
 
-# 设置calibre路径，自动解压calibre转换的htmlz文件，并计算出book_no和book_name
-calibre_path = r"/Users/tangqiang/Calibre Library/"
-author_name = r"Chuck Chakrapani"
-book_name = r"The Good Life Handbook"
-
-book_no = "e29"
-book_name = "why_buddhism_is_true"
+book_no = "001"
+book_name = "go_pro"
 
 # 第一步：读取英文和中文文档，设置输出双语文件名
 path = r"/Users/tangqiang/books/{}_{}/".format(book_no,book_name)
@@ -74,22 +69,25 @@ lst_img = soup_en("img")
 # 分别计算每张图片的前一个和后一个要素，做成列表集：
 # [图片,前一个非空元素的最后20个字符（若不满20个则以本身计）,后一个非空元素的前20个字符（若不满20个则以本身计）]
 idx_img = []
-for img_tag in lst_img:
-    # 计算当前img_tag前一个非空元素的最后20个字符（若不满20个则以本身计）
-    crt_img_prv_txt = img_tag.previous_element
-    while len(crt_img_prv_txt.get_text().strip()) == 0:
-        crt_img_prv_txt = crt_img_prv_txt.previous_element
-    prv_img_txt = crt_img_prv_txt.get_text().replace("\n","")[-30:]
+try:
+    for img_tag in lst_img:
+        # 计算当前img_tag前一个非空元素的最后20个字符（若不满20个则以本身计）
+        crt_img_prv_txt = img_tag.previous_element
+        while len(crt_img_prv_txt.get_text().strip()) == 0:
+            crt_img_prv_txt = crt_img_prv_txt.previous_element
+        prv_img_txt = crt_img_prv_txt.get_text().replace("\n","")[-30:]
 
-    # 计算当前img_tag后一个非空元素的前20个字符（若不满20个则以本身计）
-    crt_img_nxt_txt = img_tag.next_element
-    while len(crt_img_nxt_txt.get_text().strip()) == 0:
-        crt_img_nxt_txt = crt_img_nxt_txt.next_element
-    nxt_img_txt = crt_img_nxt_txt.get_text().replace("\n","")[:30]
+        # 计算当前img_tag后一个非空元素的前20个字符（若不满20个则以本身计）
+        crt_img_nxt_txt = img_tag.next_element
+        while len(crt_img_nxt_txt.get_text().strip()) == 0:
+            crt_img_nxt_txt = crt_img_nxt_txt.next_element
+        nxt_img_txt = crt_img_nxt_txt.get_text().replace("\n","")[:30]
 
-    img_tag_wrap = img_tag
-    # 将计算结果放入idx_img列表
-    idx_img.append([img_tag, prv_img_txt, nxt_img_txt])
+        img_tag_wrap = img_tag
+        # 将计算结果放入idx_img列表
+        idx_img.append([img_tag, prv_img_txt, nxt_img_txt])
+except:
+    pass
 
 soup_zh = BeautifulSoup(html_zh, features='html.parser')  # 'lxml'
 # 删除所有span标签

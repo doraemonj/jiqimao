@@ -20,8 +20,8 @@ python_path = r"/Users/tangqiang/jiqimao/"
 # Windows用户可更换为：python_path = r"C:\\Users\\Administrator\\jiqimao\\"
 # 并调整文件路径
 
-book_no = "001"
-book_name = "go_pro"
+book_no = "006"
+book_name = "exit_voice_and_loyalty"
 
 # 第一步：读取英文和中文文档，设置输出双语文件名
 path = r"/Users/tangqiang/books/{}_{}/".format(book_no,book_name)
@@ -214,7 +214,8 @@ for i,el in enumerate(lst_bi):
                     if img_num >= len(idx_img):
                         print(f"完成{img_num}张图片插入")
                     else:
-                        print(f"第{img_num}张图片报错，放弃，请检查")
+                        print(f"第{img_num}张图片报错，请检查")
+                        img_num = 0
 
 # .3)输出末尾部分
 html_end = libmind.html_end
@@ -232,3 +233,18 @@ else:
 # 计算时间
 time_end=time.time()
 print(f"本书合并流程消耗{time_end-time_start:.2f}秒")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

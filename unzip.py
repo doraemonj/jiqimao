@@ -96,9 +96,19 @@ for el in os.listdir(destin_path):
 num_patten = r'(^[-+]?([1-9][0-9]*|0)(\.[0-9]+)?$)'
 fore_3rd = ["000"]
 for el in os.listdir(book_path):
-    if re.match(num_patten, el):
-        fore_3rd.append(el[:3])
-new_book_num = int(max(fore_3rd)) + 1                           # 计算新书号
+    try:
+        el = "{:03d}".format(int(el[:3]))
+        print("成功：{}   type(el) = {}".format(el, type(el)))
+        if re.match(num_patten, str(int(el))) != None:
+            print(el)
+            fore_3rd.append(el)
+    except:
+        # print("失败：{}".format(el))
+        pass
+print(fore_3rd)
+fore_set = set(fore_3rd)
+
+new_book_num = int(max(fore_set)) + 1                           # 计算新书号
 new_book_name = re.sub(r'\([^)]*\)', '', book_name).strip()     # 计算新书名
 
 # 计算书的文件夹名：三位书号 + 全部小写的书名
@@ -107,11 +117,31 @@ book_file_name = "{:03d}_{}".format(new_book_num, file_name)
 
 
 # 解压文件去指定目录book_path
-zip = htmlz.Htmlz(destin_path + htmlz_name, book_path + os.sep + book_file_name)
+zip = htmlz.Htmlz(destin_path + htmlz_name, book_path + book_file_name)
 zip.extract()
 print(zip.out_dir)
 
 # 将index.html文件改名，方便上传DeepL时的区分
 os.rename(book_path + book_file_name + os.sep + "index.html", \
-          book_path + book_file_name + os.sep + "{}_{}.html" \
-          .format(file_name, origin_lang))
+          book_path + book_file_name + os.sep + "{}_{}.html".format(file_name, origin_lang))
+
+# transfer variants
+book_no = "{:03d}".format(new_book_num)
+book_name= book_name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

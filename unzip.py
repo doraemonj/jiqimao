@@ -15,7 +15,8 @@ origin_lang = "en"
 
 # 数下根目录有几个分隔符
 root_sep_num =  calibre_path.count(os.sep)
-# 遍历calibre_path里的所有文件夹，取最新修改的文件夹（作者）里最新修改的文件夹（书名），计算出book_no和book_name
+# 遍历calibre_path里的所有文件夹，取最新修改的文件夹（作者）里最新修改的文件夹（书名）
+# 计算出book_no和book_name
 calibre_folders = os.walk(calibre_path)
 authors = {}
 books =  {}

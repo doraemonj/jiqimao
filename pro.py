@@ -20,8 +20,8 @@ python_path = r"/Users/tangqiang/jiqimao/"
 # Windows用户可更换为：python_path = r"C:\\Users\\Administrator\\jiqimao\\"
 # 并调整文件路径
 
-book_no = "006"
-book_name = "exit_voice_and_loyalty"
+book_no = "007"
+book_name = "the_lessons_of_history"
 
 # 第一步：读取英文和中文文档，设置输出双语文件名
 path = r"/Users/tangqiang/books/{}_{}/".format(book_no,book_name)

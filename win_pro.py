@@ -6,6 +6,7 @@ import time
 import os
 import shutil
 from bs4 import BeautifulSoup
+from pathlib import Path
 import time
 import random
 import libmind
@@ -16,15 +17,15 @@ time_start=time.time()
 translated_date = time.strftime("%Y-%m-%d", time.localtime())   # 电子书制作日期
 
 # Python基础路径设置及待复制：
-python_path = r"/Users/tangqiang/jiqimao/"
+python_path = Path(r"F:\jiqimao")
 # Windows用户可更换为：python_path = r"C:\\Users\\Administrator\\jiqimao\\"
 # 并调整文件路径
 
-book_no = "999"
-book_name = "your_brain_is_a_time_machine"
+book_no = "003"
+book_name = "the_art_of_loving"
 
-# 第一步：读取英文和中文文档，设置输出双语文件名
-path = r"/Users/tangqiang/books/{}_{}/".format(book_no,book_name)
+# 第一步：读取英文和中文文档，设置输出双语文件名 F:\books\002_the_art_of_loving
+path = Path(r"F:\books\{}_{}".format(book_no,book_name))
 # Windows用户可更换为：path = r"D:\\books\\{}_{}\\".format(book_no, book_name)
 # 并调整文件路径
 
@@ -34,18 +35,18 @@ file_zh = r"{}_zh.html".format(book_name)
 file_bi = r"{}_bi_en_zh.html".format(book_name)
 
 # ===查看是否存在image文件夹：若有则忽略，若不存在则创建 2022-11-21 17:20:39
-image_dir = path + r"images"
+image_dir = path / r"images"
 if not os.path.exists(image_dir):
     os.makedirs(image_dir)
 
 # ===2022-10-25 调试代码：复制广告图片文件和style.css文件
-libmind.copy_allfiles(python_path+"ad_img", path+"images")      # 复制广告图片
-shutil.copyfile(python_path+"style.css", path+"style.css")      # 复制css文件
+libmind.copy_allfiles(python_path / r"ad_img", path/"images")      # 复制广告图片
+shutil.copyfile(python_path/r"style.css", path/"style.css")      # 复制css文件
 
 # ===读取中英文文件
 
-html_en = open(path + file_en, 'r', encoding='utf-8').read()    # 读取英文文件
-html_zh = open(path + file_zh, 'r', encoding='utf-8').read()    # 读取中文文件
+html_en = open(path / file_en, 'r', encoding='utf-8').read()    # 读取英文文件
+html_zh = open(path / file_zh, 'r', encoding='utf-8').read()    # 读取中文文件
 
 # 第二步：将英文和中文文件按段落排列好，
 soup_en = BeautifulSoup(html_en, features='html.parser')
@@ -96,7 +97,6 @@ for span in soup_zh("span"):
 raw_zh = soup_zh.get_text(separator=" ")
 lst_zh = raw_zh.split("\n")
 
-
 # 过滤中文格式
 lst_zh_format = []
 for el in lst_zh:
@@ -138,10 +138,10 @@ except:
 # .1）输出标题头
 html_head = libmind.html_head.format(soup_en.title.string, soup_zh.title.string, translated_date)
 # 检查bilingual_html是否存在，若存在，在先改名：原文件名前加『backup=』，再删除源文件
-if os.path.exists(path + file_bi):
-    os.rename(path + file_bi, path + "backup-{}-".format(random.randint(1000,9999)) + file_bi)
+if os.path.exists(path / file_bi):
+    os.rename(path / file_bi, path / "backup-{}-{}".format(str(random.randint(1000,9999)),file_bi))
 
-with open(path + file_bi, "a", encoding="utf-8") as f:
+with open(path / file_bi, "a", encoding="utf-8") as f:
     f.write(f"{html_head}\n")
 
 # .2）输出主干部分（仅文字）
@@ -151,7 +151,7 @@ for i,el in enumerate(lst_bi):
     if el[0]=="" and el[1]=="":
         continue
     else:
-        with open(path + file_bi, "a", encoding="utf-8") as f:
+        with open(path / file_bi, "a", encoding="utf-8") as f:
             f.write(f'<div class ="bottom">\n<div class ="top left">\n')
             f.write(f'<p class ="en">{el[0]}</p>')
             f.write(f'</div>\n<div class="top right">\n')
@@ -169,10 +169,10 @@ for i,el in enumerate(lst_bi):
                     f.write(f"<div style='text-align: center'>{idx_img[img_num][0]}</div>\n")
                     print(f"========")
                     print(f"第{img_num + 1}张图片{idx_img[img_num][0].get('src')}完美插入")
-                    print(f"{idx_img[img_num][1] = }")
+                    print(f"{idx_img[img_num][1]}")
                     print(f"前部：{el[0]}")
-                    print(f"{idx_img[img_num][2] = }")
-                    print(f"后部：{lst_bi[i+1][0]}")
+                    print(f"{idx_img[img_num][2]}")
+                    print(f"{lst_bi[i+1][0]}")
                     print(f"========")
                     print(f"\n\n")
                     img_num += 1
@@ -183,12 +183,12 @@ for i,el in enumerate(lst_bi):
                     f.write(f"<div style='text-align: center'>{idx_img[img_num][0]}</div>\n")
                     print(f"========")
                     print(f"第{img_num + 1}张图片{idx_img[img_num][0].get('src')}前部对齐，建议人工审核")
-                    print(f"{idx_img[img_num][1] = }")
+                    print(f"{idx_img[img_num][1]}")
                     print(f"前部：{el[0]}")
-                    print(f"{idx_img[img_num][2] = }")
-                    print(f"后部：{lst_bi[i+1][0] =}")
-                    print(f"{idx_img[img_num][2] in lst_bi[i+1][0] = }")
-                    print(f"{lst_bi[i+1][0] in idx_img[img_num][2] = }")
+                    print(f"{idx_img[img_num][2]}")
+                    print(f"后部：{lst_bi[i+1][0]}")
+                    print(f"{idx_img[img_num][2] in lst_bi[i+1][0]}")
+                    print(f"{lst_bi[i+1][0] in idx_img[img_num][2]}")
                     print(f"========")
                     print(f"\n\n")
                     img_num += 1
@@ -198,9 +198,9 @@ for i,el in enumerate(lst_bi):
                     f.write(f"<div style='text-align: center'>{idx_img[img_num][0]}</div>\n")
                     print(f"========")
                     print(f"第{img_num + 1}张图片{idx_img[img_num][0].get('src')}后部对齐，建议人工审核")
-                    print(f"{idx_img[img_num][1] = }")
+                    print(f"{idx_img[img_num][1]}")
                     print(f"前部：{el[0]}")
-                    print(f"{idx_img[img_num][2] = }")
+                    print(f"{idx_img[img_num][2]}")
                     print(f"后部：{lst_bi[i+1][0]}")
                     print(f"========")
                     print(f"\n\n")
@@ -220,7 +220,7 @@ for i,el in enumerate(lst_bi):
 
 # .3)输出末尾部分
 html_end = libmind.html_end
-with open(path + file_bi, "a", encoding="utf-8") as f:
+with open(path / file_bi, "a", encoding="utf-8") as f:
     f.write(f"{html_end}")
     f.write(f"</body>\n</html>")
 
@@ -234,18 +234,3 @@ else:
 # 计算时间
 time_end=time.time()
 print(f"本书合并流程消耗{time_end-time_start:.2f}秒")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

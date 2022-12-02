@@ -5,14 +5,16 @@ import os
 import shutil
 from bs4 import BeautifulSoup
 import time
+from pathlib import Path
 import libmind
+
 translated_date = time.strftime("%Y-%m-%d", time.localtime())
 
-book_no = "012"
-book_name = "the_radicalism_of_the_american_revolution"
+book_no = "003"
+book_name = "the_art_of_loving"
 
-title_en = "The Radicalism Of The American Revolution"
-title_zh = "美国革命的激进主义"
+title_en = "The Art Of Loving"
+title_zh = "爱的艺术"
 
 # 增加清除DeepL文本的函数工具（参考李笑来github代码库）
 
@@ -28,29 +30,24 @@ def copy_allfiles(src, dest):
             shutil.copy(full_file_name, dest)
 
 # Python基础路径设置及待复制：
-python_path = r"/Users/tangqiang/PycharmProjects/pythonProject/deepL_pro/"
+python_path = Path(r"F:\jiqimao")
 css_file = r"style.css"
 
 # 第一步：读取英文和中文文档，设置输出双语文件名
-path = r"/Users/tangqiang/books/{}_{}/".format(book_no,book_name)
+path = Path(r"F:\books\{}_{}".format(book_no,book_name))
 
 # ===2022-10-25 调试代码：复制广告图片文件和style.css文件
-copy_allfiles(python_path+"ad_img", path+"images")              # 复制广告图片
-shutil.copyfile(python_path+"style.css", path+"style.css")      # 复制css文件
+copy_allfiles(python_path / r"ad_img", path / r"images")              # 复制广告图片
+shutil.copyfile(python_path / r"style.css", path / r"style.css")      # 复制css文件
 
 
 # 第一步：读取英文和中文文档，设置输出双语文件名
-path = r"/Users/tangqiang/books/{}_{}/".format(book_no,book_name)
+path = Path(r"F:\books\{}_{}".format(book_no,book_name))
 file_en = "{}_en.txt".format(book_name)
 file_zh = "{}_zh.txt".format(book_name)
 file_bi = "{}_bi_txt_img_en_zh.html".format(book_name)
-txt_en = open(path + file_en, "r", encoding="utf-8").read()    # 读取英文文件
-txt_zh = open(path + file_zh, "r", encoding="utf-8").read()    # 读取中文文件
-
-# ===查看是否存在image文件夹：若有则忽略，若不存在则创建 2022-11-30 17:20:39
-image_dir = path + r"images"
-if not os.path.exists(image_dir):
-    os.makedirs(image_dir)
+txt_en = open(path / file_en, "r", encoding="utf-8").read()    # 读取英文文件
+txt_zh = open(path / file_zh, "r", encoding="utf-8").read()    # 读取中文文件
 
 # 第二步：将英文和中文文件按段落排列好，
 lst_en=[]
@@ -97,7 +94,7 @@ for i, el_en in enumerate(lst_zh):
 # .1）输出标题头
 html_head = libmind.html_head.format(title_en, title_zh, translated_date)
 
-with open(path + file_bi, "a", encoding="utf-8") as f:
+with open(path / file_bi, "a", encoding="utf-8") as f:
     f.write(f"{html_head}\n")
 
 # .2）输出主干部分（仅文字）
@@ -105,7 +102,7 @@ for el in (lst_bi):
     if lst_bi[0]=="" and lst_bi[1]=="":
         continue
     else:
-        with open(path + file_bi, "a") as f:
+        with open(path / file_bi, "a", encoding ="utf-8") as f:
             f.write(f'<div class ="bottom">\n<div class ="top left">\n')
             f.write(f'<p class ="en">{el[0]}</p>')
             f.write(f'</div>\n<div class="top right">\n')
@@ -114,6 +111,6 @@ for el in (lst_bi):
 
 # .3)输出末尾部分
 html_end = libmind.html_end
-with open(path + file_bi, "a", encoding="utf-8") as f:
+with open(path / file_bi, "a", encoding="utf-8") as f:
     f.write(f"{html_end}")
     f.write(f"</body>\n</html>")

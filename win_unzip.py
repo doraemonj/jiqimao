@@ -1,22 +1,22 @@
 # 自动解压calibre文件夹中最新的文件，到指定目录中去，可以省去《自助翻译课程》里的calibre解压后的手工腾挪
 # 本代码来源于巴别塔社群Tecson同学的贡献，Tecson同学贡献了思路和htmlz.py文件
-# 2022-12-02 调整路径
+# 2022年12月2日更新，解决Windows路径适用问题
 import os
 import time
 import re
-import bs4
+from pathlib import Path
 from collections import Counter
 import htmlz
 
 # 设置calibre路径（用户设置），自动解压calibre转换的htmlz文件
-calibre_path = r"/Users/tangqiang/Calibre Library/"
+calibre_path = Path(r"F:\calibre")
 # 解压文件的目标路径
-book_path = r"/Users/tangqiang/books/"
+book_path = Path(r"F:\books")
 # 原书语言，默认英语
 origin_lang = "en"
 
 # 数下根目录有几个分隔符
-root_sep_num =  calibre_path.count(os.sep)
+root_sep_num =  str(calibre_path).count(os.sep)
 # 遍历calibre_path里的所有文件夹，取最新修改的文件夹（作者）里最新修改的文件夹（书名）
 # 计算出book_no和book_name
 calibre_folders = os.walk(calibre_path)
@@ -24,16 +24,18 @@ authors = {}
 books =  {}
 
 for root, dirs, files in calibre_folders:
-    if root == calibre_path:
+    if Path(root) == calibre_path:
+        print("打印主路径")
         print("root: ", root)  # 当前目录路径
         print("dirs: ", dirs)  # 当前路径下所有子目录
         print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(os.stat(root).st_mtime)))
         print("======")
 
-        for sub_root, sub_dirs, sub_files in os.walk(root):
-            if sub_root.count(os.sep) == root_sep_num:
-                author = sub_root.replace(calibre_path, "")
+        for sub_root, sub_dirs, sub_files in os.walk(Path(root)):
+            if sub_root.count(os.sep) == root_sep_num + 1:
+                author = sub_root.replace(str(Path(calibre_path)), "").replace("\\", "")
                 modified_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(os.stat(sub_root).st_mtime))
+                print("打印次路径")
                 print("sub_root: ", sub_root)
                 print("author: ", author)
                 print("sub_dirs: ", sub_dirs)
@@ -42,26 +44,28 @@ for root, dirs, files in calibre_folders:
 
                 if len(author) > 0:
                     authors[author] = modified_date
+                    print(f"authors字典为：{authors}")
 
 # 取根目录下最新文件夹（作者）：
+newest_author = ""
 for author, modified_time in authors.items():
     if modified_time == max(authors.values()):
         newest_author = author
 print(f"最新作者为：{newest_author}，更新时间为：{max(authors.values())}")
 
 # 查找最新作者的最新书籍
-author_path = calibre_path + newest_author
+author_path = calibre_path / newest_author
 author_path_folders = os.walk(author_path)
 for root, dirs, files in author_path_folders:
-    if root == author_path:
+    if Path(root) == author_path:
         print("root: ", root)  # 当前目录路径
         print("dirs: ", dirs)  # 当前路径下所有子目录
         print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(os.stat(root).st_mtime)))
         print("======")
 
         for sub_root, sub_dirs, sub_files in os.walk(root):
-            if sub_root.count(os.sep) == root_sep_num + 1:
-                book = sub_root.replace(calibre_path + newest_author + os.sep, "")
+            if sub_root.count(os.sep) == root_sep_num + 2:
+                book = sub_root.replace(str(calibre_path / newest_author), "").replace("\\", "")
                 modified_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(os.stat(sub_root).st_mtime))
                 print("sub_root: ", sub_root)
                 print("book: ", )
@@ -85,11 +89,11 @@ author_name = newest_author
 book_name = newest_book
 
 # 打印验证
-print(f"{author_name = }")
-print(f"{book_name = }")
+print(f"{author_name}")
+print(f"{book_name}")
 
 # 全路径名称：calibre_path + author_name  + os.sep +book_name + os.sep
-destin_path = calibre_path + author_name  + os.sep + book_name + os.sep
+destin_path = calibre_path / author_name  / book_name
 # 查找全路径名下的.htmlz文件
 for el in os.listdir(destin_path):
     if el.endswith(".htmlz"):
@@ -120,30 +124,22 @@ book_file_name = "{:03d}_{}".format(new_book_num, file_name)
 
 
 # 解压文件去指定目录book_path
-zip = htmlz.Htmlz(destin_path + htmlz_name, book_path + book_file_name)
+zip = htmlz.Htmlz(destin_path / htmlz_name, book_path / book_file_name)
 zip.extract()
 print(zip.out_dir)
 
 # 将index.html文件改名，方便上传DeepL时的区分
-os.rename(book_path + book_file_name + os.sep + "index.html", \
-          book_path + book_file_name + os.sep + "{}_{}.html".format(file_name, origin_lang))
+os.rename(book_path / book_file_name / r"index.html", \
+          book_path / book_file_name / "{}_{}.html".format(file_name, origin_lang))
 
 # transfer variants
 book_no = "{:03d}".format(new_book_num)
 book_name= book_name
 
 
-# 把en.html中的span标签删除
-source_filename = book_path + book_file_name + os.sep + "{}_{}.html".format(file_name, origin_lang)
-target_filename = book_path + book_file_name + os.sep + "{}_{}_done.html".format(file_name, origin_lang)
 
-html = open(source_filename)
-htmltext = html.read()
-soup = bs4.BeautifulSoup(htmltext)
-for span in soup.find_all("span"):
-    span.unwrap()
-with open(target_filename, "w", encoding = "utf-8") as f:
-    f.write(str(soup))
+
+
 
 
 

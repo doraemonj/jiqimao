@@ -8,11 +8,11 @@ import time
 import libmind
 translated_date = time.strftime("%Y-%m-%d", time.localtime())
 
-book_no = "012"
-book_name = "the_radicalism_of_the_american_revolution"
+book_no = "029"
+book_name = "in_the_tigers_lair"
 
-title_en = "The Radicalism Of The American Revolution"
-title_zh = "美国革命的激进主义"
+title_en = "In The Tiger's Lair"
+title_zh = "深入虎穴"
 
 # 增加清除DeepL文本的函数工具（参考李笑来github代码库）
 

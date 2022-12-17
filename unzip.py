@@ -47,7 +47,7 @@ for root, dirs, files in calibre_folders:
 for author, modified_time in authors.items():
     if modified_time == max(authors.values()):
         newest_author = author
-print(f"最新作者为：{newest_author}，更新时间为：{max(authors.values())}")
+print("最新作者为：{}，更新时间为：{}".format(newest_author, max(authors.values())))
 
 # 查找最新作者的最新书籍
 author_path = calibre_path + newest_author
@@ -76,7 +76,7 @@ for root, dirs, files in author_path_folders:
 for book, modified_time in books.items():
     if modified_time == max(books.values()):
         newest_book = book
-print(f"最新作者为：{newest_book}，更新时间为：{max(authors.values())}")
+print("最新作者为：{}，更新时间为：{}".format(newest_book,max(authors.values())))
 
 
 
@@ -85,8 +85,8 @@ author_name = newest_author
 book_name = newest_book
 
 # 打印验证
-print(f"{author_name = }")
-print(f"{book_name = }")
+# print(f"{author_name = }")
+# print(f"{book_name = }")
 
 # 全路径名称：calibre_path + author_name  + os.sep +book_name + os.sep
 destin_path = calibre_path + author_name  + os.sep + book_name + os.sep
@@ -126,7 +126,7 @@ print(zip.out_dir)
 
 # 将index.html文件改名，方便上传DeepL时的区分
 os.rename(book_path + book_file_name + os.sep + "index.html", \
-          book_path + book_file_name + os.sep + "{}_{}.html".format(file_name, origin_lang))
+          book_path + book_file_name + os.sep + "{}_{}_undel_span.html".format(file_name, origin_lang))
 
 # transfer variants
 book_no = "{:03d}".format(new_book_num)
@@ -134,8 +134,8 @@ book_name= book_name
 
 
 # 把en.html中的span标签删除
-source_filename = book_path + book_file_name + os.sep + "{}_{}.html".format(file_name, origin_lang)
-target_filename = book_path + book_file_name + os.sep + "{}_{}_done.html".format(file_name, origin_lang)
+source_filename = book_path + book_file_name + os.sep + "{}_{}_undel_span.html".format(file_name, origin_lang)
+target_filename = book_path + book_file_name + os.sep + "{}_{}.html".format(file_name, origin_lang)
 
 html = open(source_filename)
 htmltext = html.read()
